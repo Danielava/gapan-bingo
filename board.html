@@ -4,9 +4,33 @@
 <meta charset="utf-8" />
 <title>Page Title</title>
 </head>
-<body id = "body" style="padding-left:100px">
+<body id = "body" style="padding-left:200px">
 
-<h1 style = "padding-left:200px; text-shadow:1px 1px 1px rgba(255,255,255,1)">ダニエル</h1>
+<div id="settingsDiv" style="padding-left:800px; padding-top:100px; position:absolute; /*border:1px; border-style:solid; display:inline;*/">
+  <h1>Settings</h1>
+<form action="">
+  <label for="fname">Your name (in japanese please!)</label><br>
+  <input type="text" id="fname" name="fname" value="ジョジョ" onkeypress="return event.keyCode != 13"><br>
+</form> 
+  <button id="ButtonName" onclick="ChangeName()">Apply name</button>
+  <button id="ButtonImage" onclick="RegenerateAnimeImage(false)">Change Image</button>
+  <button id="ButtonImage" onclick="RegenerateAnimeImage(true)">Change Image(WARNING!! NSFW)</button>
+  <button id="ButtonBoard" onclick="RegenerateBoard()">Regenerate board</button>
+
+  <h1>Image Width</h1>
+  <button id="width+" onclick="ChangeWidthButton(20)">+</button>
+  <button id="width-" onclick="ChangeWidthButton(-20)">-</button>
+  <input id="widthSlider" type="range" min="0" max="400" value="0" style="width:250px;" oninput="ChangeWidthSlider(value)">
+
+  <h1>Image Height</h1>
+  <button id="height+" onclick="ChangeHeightButton(10)">+</button>
+  <button id="height-" onclick="ChangeHeightButton(-10)">-</button>
+  <input id="heightSlider" type="range" min="0" max="400" value="0" style="width:250px;" oninput="ChangeHeightSlider()">
+</div>
+
+<div id="nameDiv">
+<h1 id="name" style = "text-align:center; text-shadow:1px 1px 1px rgba(255,255,255,1);">ジョジョ</h1>
+</div>
 <table id="table" border = "1 px">
 <tr id = "id1">
 

@@ -43,7 +43,6 @@ var easy =
 "Kolla på cherry blossom 🌸",
 "Ät mochi",
 "Ät Dango",
-"Duscha",
 "Ställ upp för en bro",
 "Fireworks",
 "Go to the top floor of a high building (not skytower)",
@@ -155,9 +154,11 @@ var degenerate_color = "rgba(255,213,128,"+alpha+")";
 
 var cellSize = 100;
 var cellsPerRow = 5;
+var userWidthInput = 0;
+var userHeightInput = 0;
 //var spaceBetweenCells = 2; //This is the default distance between cells in html, unless overriden!
 
-const WARNING_DONT_SET_TO_TRUE = false;
+var WARNING_DONT_SET_TO_TRUE = false;
 GenerateAnimeImages(1);
 GenerateContentInTables();
 
@@ -200,6 +201,7 @@ function GenerateContentInTables()
   putInTable(nums[24], "KOMPIS VAL", buddy_choice_color);
   //console.log(nums[0]);
   //putInTable(nums[0], easy[0], "#ceebfd");
+  RecentreName();
 }
 
 function putInTable(pos, text, color) {
@@ -233,6 +235,39 @@ function shuffle(arra1) {
         arra1[index] = temp;
     }
     return arra1;
+}
+
+//Makes name appear in centre of board!
+function RecentreName()
+{
+  var name = document.getElementById("name");
+  name.style.marginLeft = "-690px";
+}
+
+function RegenerateBoard()
+{
+  //Delete all cells
+  for(var i = 1; i <= cellsPerRow; i++) {
+      /*
+          InnerHTML gives us what's inside <idx> which should be empty at first (expected)!
+          But keeps getting added to on row 120.
+      */
+      var tableInner = document.getElementById("id" + i);
+      while (tableInner.firstChild) {
+        tableInner.removeChild(tableInner.lastChild);
+      }
+  }
+  GenerateContentInTables();
+}
+
+function RegenerateAnimeImage(bool)
+{
+  const img = document.getElementById("Im0");
+  img.remove();
+  userWidthInput = 0;
+  userHeightInput = 0;
+  WARNING_DONT_SET_TO_TRUE = bool;
+  GenerateAnimeImages(1);
 }
 
 function GenerateAnimeImages(number)
@@ -276,11 +311,11 @@ function FixImageAspectRatio2(image_id)
   var stretchOffset = 25; //If this is 0 then our image width will perfectly fit the board!!
   var size = (cellsPerRow*cellSize+magic_number);
 
-  img.style.width = size + stretchOffset + "px";
+  img.style.width = size + stretchOffset + userWidthInput + "px";
   var heightOffset = 200;
-  img.style.height = size + heightOffset + "px";
+  img.style.height = size + heightOffset + userHeightInput + "px";
 
-  img.style.marginLeft = -(stretchOffset/2.0)+"px";
+  img.style.marginLeft = -((stretchOffset+userWidthInput)/2.0)+"px";
   img.style.marginTop = '-620px';
 
   //These two are very important to make the image appear behind our table!
@@ -320,15 +355,56 @@ function FetchAPIImage()
   return url;
 }
 
+
+
 /*
   Put this in your html as a good test:
   <img id="Im1" src="https://i.waifu.pics/cG2o0Hs.jpg" style="width: 30%; margin-left: 0px; margin-top: -600px; z-index: -1; position: absolute;">
 */
 
-/*
-  Another good test
-  <img id="Im0" src="https://i.waifu.pics/9seL-Rc.jpg" style="width: 30%; margin-left: -100px; margin-top: -600px; z-index: -1; position: absolute;">
-  <img id="Im0" src="https://i.waifu.pics/9seL-Rc.jpg" style="width: 30%; margin-left: 200px; margin-top: -600px; z-index: -1; position: absolute;">
-  <img id="Im0" src="https://i.waifu.pics/9seL-Rc.jpg" style="width: 30%; margin-left: -100px; margin-top: -200px; z-index: -1; position: absolute;">
-  <img id="Im0" src="https://i.waifu.pics/9seL-Rc.jpg" style="width: 30%; margin-left: 200px; margin-top: -200px; z-index: -1; position: absolute;">
-*/
+//EventListeners for buttons!
+function ChangeWidthButton(value)
+{
+    var img = document.getElementById("Im0");
+    var currWidth = img.width;
+    img.style.width = (currWidth + value) + "px";
+    userWidthInput += value;
+    FixImageAspectRatio2(0);
+}
+
+function ChangeHeightButton(value)
+{
+    var img = document.getElementById("Im0");
+    var currHeight = img.height;
+    img.style.height = (currHeight + value) + "px";
+    userHeightInput += value;
+    FixImageAspectRatio2(0);
+}
+
+function ChangeWidthSlider()
+{
+    //console.log(value);
+    var img = document.getElementById("Im0");
+    var sliderValue = document.getElementById("widthSlider").value;
+    var currWidth = img.width;
+    img.style.width = (Number(currWidth) + Number(sliderValue)) + "px";
+    userWidthInput = Number(sliderValue);
+    FixImageAspectRatio2(0);
+}
+
+function ChangeHeightSlider()
+{
+    var img = document.getElementById("Im0");
+    var sliderValue = document.getElementById("heightSlider").value;
+    var currHeight = img.height;
+    img.style.height = (Number(currHeight) + Number(sliderValue)) + "px";
+    userHeightInput = Number(sliderValue);
+    FixImageAspectRatio2(0);
+}
+
+function ChangeName()
+{
+    var nameGraphics = document.getElementById("name");
+    var nameInput = document.getElementById("fname").value;
+    nameGraphics.innerHTML = nameInput;
+}
